@@ -1,0 +1,80 @@
+INFO:__main__:Initializing Crypto Twitter Bot...
+INFO:poster:Twitter API client initialized
+INFO:__main__:Bot initialized successfully
+INFO:__main__:Using custom fetch window: 24 hours
+INFO:__main__:Testing API connections...
+INFO:poster:Twitter API connected successfully. Account: @igc_fund
+INFO:news_fetcher:Fetching from: https://www.cnbc.com/id/100003114/device/rss/rss.html
+INFO:news_fetcher:Fetching from: https://www.coindesk.com/arc/outboundfeeds/rss/
+INFO:news_fetcher:Fetching from: https://www.theblock.co/rss.xml
+INFO:news_fetcher:Fetching from: https://cointelegraph.com/rss
+INFO:news_fetcher:Fetching from: https://blockworks.co/feed
+INFO:news_fetcher:Fetching from: http://feeds.feedburner.com/bankless
+INFO:news_fetcher:Fetching from: https://decrypt.co/feed
+INFO:news_fetcher:Fetched 50 recent articles
+INFO:__main__:News fetch test: Found 50 articles
+INFO:__main__:All API tests passed!
+INFO:__main__:============================================================
+INFO:__main__:Starting bot cycle at 2026-01-16 02:10:23.480136
+INFO:__main__:============================================================
+INFO:__main__:Step 1: Fetching headlines from last 24 hours...
+INFO:news_fetcher:Fetching from: https://www.cnbc.com/id/100003114/device/rss/rss.html
+INFO:news_fetcher:Fetching from: https://www.coindesk.com/arc/outboundfeeds/rss/
+INFO:news_fetcher:Fetching from: https://www.theblock.co/rss.xml
+INFO:news_fetcher:Fetching from: https://cointelegraph.com/rss
+INFO:news_fetcher:Fetching from: https://blockworks.co/feed
+INFO:news_fetcher:Fetching from: http://feeds.feedburner.com/bankless
+INFO:news_fetcher:Fetching from: https://decrypt.co/feed
+INFO:news_fetcher:Fetched 50 recent articles
+INFO:__main__:  Found 50 headlines for AI curation
+INFO:__main__:Step 2: AI selecting most critical headlines...
+INFO:analyzer:AI curating 50 headlines...
+INFO:httpx:HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:analyzer:AI selected IDs: 24
+INFO:analyzer:AI selected 1 articles: [24]
+INFO:__main__:Step 3: Fetching full articles for selected headlines...
+INFO:__main__:  Retrieved 1 articles
+INFO:__main__:  [1] Fed's Goolsbee says inflation could come 'roaring back' if c...
+INFO:__main__:Step 4: Found 1 new articles to analyze
+INFO:__main__:Step 5: Deep analysis with LLM...
+INFO:analyzer:Sending articles to LLM for institutional analysis...
+INFO:httpx:HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:analyzer:LLM response received: 1640 characters
+INFO:__main__:Step 6: Generated market update (1 tweet)
+INFO:__main__:  Part 1: **Fed's Goolsbee whispers inflation risks are back.**
+
+**[TH...
+INFO:__main__:Step 7: Posting to Twitter...
+INFO:poster:[DRY RUN MODE] Previewing tweets without posting to Twitter
+INFO:poster:[DRY RUN] Previewed 1 tweets
+INFO:__main__:✓ Cycle completed successfully!
+INFO:__main__:Bot execution complete. Exiting.
+
+    ╔════════════════════════════════════════════╗
+    ║  Crypto Institutional Twitter Bot v1.0     ║
+    ║  Professional Market Analysis & Posting    ║
+    ╚════════════════════════════════════════════╝
+    
+
+==================================================
+=== [DRY RUN] TWEET PREVIEW 1/1 ===
+==================================================
+**Fed's Goolsbee whispers inflation risks are back.**
+
+**[THE MECHANICS]**  
+Federal Reserve Bank of Chicago President Austan Goolsbee warned that inflation could "roar back" if central bank independence is compromised. He emphasized that any attack on the Fed's autonomy would be detrimental to economic stability.
+
+**[THE DEEP DIVE]**  
+This isn't just another Fed official toeing the party line. Goolsbee's comments highlight a critical structural risk that markets are underpricing: the erosion of central bank independence. Political pressures have been mounting, with some policymakers openly questioning the Fed's mandate. Historically, when central banks lose independence, inflation expectations become unanchored, leading to volatile price regimes. 
+
+Our desk sees this as a subtle but significant signal that the Fed is preparing for a more challenging macro environment. Inflation "roaring back" isn't just about rate hikes—it's about credibility. If markets start pricing in diminished Fed autonomy, we could see a repricing of long-term inflation expectations. This would ripple through risk assets, particularly duration-sensitive instruments like bonds and growth equities.
+
+**[OUR DESK'S VIEW]**  
+This reinforces our cautious stance on fixed income and supports a continued bid for inflation-sensitive assets like gold. The risk/reward in equities skews bearish if inflation expectations begin to destabilize. Goolsbee's warning is a reminder that the Fed's independence is a cornerstone of market stability—any cracks could be costly.
+
+Stance: Bullish on inflation hedges. Bearish on long-duration assets.
+
+**#Macro $GC**
+==================================================
+Characters: 1640/280
+
