@@ -22,17 +22,27 @@ class TwitterPoster:
         api_secret = os.getenv("TWITTER_API_SECRET")
         access_token = os.getenv("TWITTER_ACCESS_TOKEN")
         access_token_secret = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
-        
+
         if not all([api_key, api_secret, access_token, access_token_secret]):
             raise ValueError("Twitter API credentials not found in environment")
-        
-        # Authenticate with Twitter API v2
-        self.client = tweepy.Client(
-            consumer_key=api_key,
-            consumer_secret=api_secret,
-            access_token=access_token,
-            access_token_secret=access_token_secret
-        )
+
+        # Debug: Check for proxy env vars
+        logger.info(f"HTTP_PROXY: {os.getenv('HTTP_PROXY', 'not set')}")
+        logger.info(f"HTTPS_PROXY: {os.getenv('HTTPS_PROXY', 'not set')}")
+        logger.info(f"Tweepy version: {tweepy.__version__}")
+
+        # Authenticate with Twitter API v2 - NO PROXIES
+        try:
+            self.client = tweepy.Client(
+                consumer_key=api_key,
+                consumer_secret=api_secret,
+                access_token=access_token,
+                access_token_secret=access_token_secret
+            )
+        except TypeError as e:
+            logger.error(f"TypeError creating Client: {e}")
+            logger.error(f"Tweepy Client signature: {tweepy.Client.__init__.__code__.co_varnames}")
+            raise
         
         logger.info("Twitter API client initialized")
     
