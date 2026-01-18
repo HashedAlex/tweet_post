@@ -181,12 +181,14 @@ def main():
                         help="Re-post content from latest_tweet.md (skip fetching)")
     args = parser.parse_args()
 
-    # Handle live mode
+    # Handle live mode - use config.py setting by default
     if args.live:
-        print("LIVE MODE: Posting to Twitter enabled!")
         config.DRY_RUN = False
+
+    if config.DRY_RUN:
+        print("DRY RUN MODE: Posting disabled. Use --live to enable.")
     else:
-        print("DRY RUN: Posting disabled (Default). Use --live to post.")
+        print("LIVE MODE: Posting to Twitter enabled!")
 
     # Initialize bot with optional overrides
     bot = CryptoTwitterBot(hours_override=args.hours, topic_filter=args.topic)
