@@ -5,6 +5,7 @@ import re
 from datetime import datetime
 from typing import List, Dict
 import logging
+import httpx
 from openai import OpenAI
 
 from config import MAX_TWEET_LENGTH, LLM_MODEL
@@ -116,9 +117,12 @@ class NewsAnalyzer:
         if not self.api_key:
             raise ValueError("OPENROUTER_API_KEY not found in environment")
 
+        # Create httpx client without proxies to avoid Railway proxy issues
+        http_client = httpx.Client()
         self.client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
-            api_key=self.api_key
+            api_key=self.api_key,
+            http_client=http_client
         )
 
     def select_top_headlines(self, headlines: List[Dict], top_k: int = 5, topic: str = None) -> List[int]:
