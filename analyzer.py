@@ -248,7 +248,7 @@ Return ONLY the {top_k} IDs, separated by commas (e.g., 3, 7, 12, 23, 41):"""
             # Fallback: return first top_k IDs
             return [h["id"] for h in headlines[:top_k]]
 
-    def analyze_news(self, articles: List[Dict]) -> List[str]:
+    def analyze_news(self, articles: List[Dict], override_context: str = None) -> List[str]:
         """
         Analyze news articles and generate institutional-grade tweets.
 
@@ -257,16 +257,14 @@ Return ONLY the {top_k} IDs, separated by commas (e.g., 3, 7, 12, 23, 41):"""
 
         Args:
             articles: List of news articles to analyze
+            override_context: Optional priority override content that replaces normal news flow
 
         Returns:
             List of tweet texts (up to 3 tweets)
         """
-        if not articles:
+        if not articles and not override_context:
             logger.warning("No articles to analyze")
             return []
-
-        # Format news content for LLM
-        news_content = self._format_articles(articles)
 
         # Inject current date into system prompt to prevent temporal hallucinations
         current_date = datetime.now().strftime("%A, %B %d, %Y")
@@ -286,6 +284,27 @@ The bot previously posted outdated news causing critical errors. You are the las
 
 """
         dynamic_system_prompt = date_context + SYSTEM_PROMPT
+
+        # Inject priority override into system prompt if provided
+        if override_context:
+            override_injection = f"""
+
+=== CRITICAL CONTEXT (PRIORITY OVERRIDE) ===
+The user has provided this expert analysis. You MUST use these specific arguments, data points, and logic as the CORE of your tweet. Do not deviate from this narrative.
+
+{override_context}
+
+=== END PRIORITY OVERRIDE ===
+
+"""
+            dynamic_system_prompt += override_injection
+            logger.info("Priority override context injected into system prompt")
+
+        # Build user prompt based on whether we have articles or override
+        if override_context and not articles:
+            news_content = override_context
+        else:
+            news_content = self._format_articles(articles)
 
         # User message with the news data
         user_prompt = f"""Analyze this news story for our trading desk.

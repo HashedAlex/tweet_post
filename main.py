@@ -57,6 +57,53 @@ class CryptoTwitterBot:
         logger.info("=" * 60)
 
         try:
+            # Check for priority override file
+            override_file = "topic_override.txt"
+            if os.path.exists(override_file):
+                logger.info("=" * 60)
+                logger.info("PRIORITY OVERRIDE DETECTED: topic_override.txt found!")
+                logger.info("=" * 60)
+                with open(override_file, "r") as f:
+                    override_context = f.read().strip()
+                logger.info(f"Override content loaded ({len(override_context)} chars)")
+
+                # Skip normal flow — go straight to LLM analysis with override
+                logger.info("Skipping normal news flow. Generating from override context...")
+                tweets = self.analyzer.analyze_news([], override_context=override_context)
+
+                if not tweets:
+                    logger.warning("No tweets generated from override context. Skipping.")
+                    return
+
+                logger.info(f"Generated override tweet ({len(tweets)} part(s))")
+
+                # Save draft
+                tweet_content = "\n\n---\n\n".join(tweets)
+                with open("latest_tweet.md", "w") as f:
+                    f.write(tweet_content)
+                print("Draft saved to latest_tweet.md")
+
+                # Archive
+                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+                with open("tweet_archive.md", "a") as f:
+                    f.write(f"\n\n--- [{timestamp}] [OVERRIDE] ---\n\n")
+                    f.write(tweet_content)
+                print("Archived to tweet_archive.md")
+
+                # Post to Twitter
+                logger.info("Posting override tweet to Twitter...")
+                success = self.poster.post_thread(tweets)
+
+                if success:
+                    logger.info("Override tweet posted successfully!")
+                    # Self-destruct: delete the override file
+                    os.remove(override_file)
+                    logger.info("topic_override.txt deleted (self-destruct).")
+                else:
+                    logger.error("Failed to post override tweet. File NOT deleted for retry.")
+
+                return  # End cycle after override
+
             # Step 1: Fetch all recent headlines
             logger.info(f"Step 1: Fetching headlines from last {self.fetch_hours} hours...")
             headlines = self.fetcher.get_all_headlines(hours=self.fetch_hours, limit=50)
